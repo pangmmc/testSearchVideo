@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+    <title>Search</title>
+    <link rel="stylesheet" href="assets/css/jquery-ui.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel='stylesheet' href="assets/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+    <br>
+    <div class="container">
+        <nav class="navbar navbar-light bg-light" style="padding: 40px;">
+            <div class="input-group mb-12">
+                <input type="text" class="form-control" id="tags" placeholder="ค้นหา" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" disabled>
+                        ค้นหา
+                    </button>
+                </div>
+            </div>
+        </nav>
+        <div class="row" id="images" style="height: 500px; width: 100%; text-align:center; padding: 40px; display: none;">
+            <div class="col-xl-12" style="background-color:black;">
+                <img id="imgShow" >
+            </div>
+        </div>
+        <div class="row" style="padding: 20px;">
+            <div class="col-xl-12">
+                <h3 id="title"></h3>
+            </div>
+        </div>
+        <div class="row" style="padding: 20px;">
+            <div class="col-xl-12">
+                <hr style="display: none;">
+            </div>
+            <div class="col-xl-12">
+                <h5 id="channelTitle"></h5>
+                <span id="publishedAt" style="color:#808080"></span>
+            </div>
+            <div class="col-xl-12">
+                <br><h5 id="description"></h5>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/jquery-3.3.1.min.js"></script>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/jquery-ui.js"></script>
+    <script>
+        $(document).ready(function() {
+            jQuery("#tags").autocomplete({
+                minLength: 3,
+                delay : 400,
+                source: function(request, response) {
+                    jQuery.ajax({
+                        type: "GET",
+                        url: "searchData.php",
+                        data: {},
+                        dataType: "json",
+                        success: function(data){
+                            response(data);
+                        }
+                    })
+            },
+            select:  function(e, ui) {
+                    $("#title").html(ui.item.label);
+                    $("#images").show();
+                    $('#imgShow').attr('src', ui.item.imageHigh);
+                    $("#channelTitle").html(ui.item.channelTitle);
+                    $("#publishedAt").html("เผยแพร่เมื่อ "+ui.item.publishedAt);
+                    $("#description").html(ui.item.description);
+                    $("hr").show();
+                }
+            });
+        });
+
+    </script>
+
+
+</body>
+</html>
